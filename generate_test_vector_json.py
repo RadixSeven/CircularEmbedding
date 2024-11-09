@@ -14,15 +14,15 @@ Example JSON output (but for 3D vectors, not 768-D vectors):
     "points": [
         {
            "point": [0.0, 0.0, 0.0],
-           "category": 1
+           "category": "1"
         },
         {
            "point": [0.1, 0.2, 0.3],
-           "category": 1
+           "category": "1"
         },
         {
            "point": [0.3, 0.2, 0.1],
-           "category": 2
+           "category": "2"
         }
     ]
 }
