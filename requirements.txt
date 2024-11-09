@@ -1,4 +1,5 @@
 pytest
 mypy
 pre-commit
-
+numpy
+black
