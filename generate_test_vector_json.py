@@ -39,13 +39,22 @@ import numpy as np
 class Shape(Enum):
     """The shapes to generate."""
 
-    torus = "torus", (
+    def __new__(cls, value: str, description: str):
+        """Create a new enum member"""
+        obj = object.__new__(cls)
+        obj._value_ = value
+        obj.description = description
+        return obj
+
+    torus = (
+        "torus",
         "In the first three dimensions of the 768-dimensional "
         "space, these are 10,000 points located within a solid "
         "torus with an inner radius of 100 and an outer radius "
-        "of 120 centered at the origin."
+        "of 120 centered at the origin.",
     )
-    cubes = "cubes", (
+    cubes = (
+        "cubes",
         "In the second three dimensions of the 768-dimensional "
         "space, these 8,000 points are divided into 8 solid "
         "cubes. Each cube has a side length of 10 and is "
@@ -53,9 +62,10 @@ class Shape(Enum):
         "imaginary cube centered at the origin, that is, "
         "one cube is centered at "
         "(0,0,0, 90,-90,-90,0,...), another at "
-        "(0,0,0, 90, 90,-90,0,...), and so on."
+        "(0,0,0, 90, 90,-90,0,...), and so on.",
     )
-    blobs = "blobs", (
+    blobs = (
+        "blobs",
         "The third group is 20,000 points in 20 isolated "
         "clusters of 1,000 points each. Each cluster is a "
         "Gaussian cloud with a standard deviation of 2.5 "
@@ -65,9 +75,10 @@ class Shape(Enum):
         "a 3-dimensional dodecahedron embedded in the third "
         "three dimensions. So, some example centers are"
         "(0,0,0,0,0,0,70/sqrt(3),70/sqrt(3),70/sqrt(3),0,...), and "
-        "(0,0,0,0,0,0,-70/sqrt(3),70/sqrt(3),70/sqrt(3),0,...)."
+        "(0,0,0,0,0,0,-70/sqrt(3),70/sqrt(3),70/sqrt(3),0,...).",
     )
-    little_sin = "little_sin", (
+    little_sin = (
+        "little_sin",
         "The fourth group is 1,000 points in a 3-dimensional "
         "S-curve embedded in the 768-dimensional space. The S-curve "
         "has height 50 and width 50 and is centered at the origin. "
@@ -75,12 +86,13 @@ class Shape(Enum):
         "y = 25 * sin(pi x/(25)). where -25 <= x <= 25 and the values "
         "at all other dimensions are uniformly sampled between -25 and 25."
         "So, one point might be "
-        "(-1,-2,3,5.5,2.1,-2,-10,-15,-12,20, 25*sin(pi*20/25), 10, -22,...), "
+        "(-1,-2,3,5.5,2.1,-2,-10,-15,-12,20, 25*sin(pi*20/25), 10, -22,...), ",
     )
-    big_sin = "big_sin", (
+    big_sin = (
+        "big_sin",
         "Like little_sin, but the S-curve has height 100 and width 100. Its "
         "x and y coordinates are 12th and 13th in the 768-dimensional space."
-        "In addition it has 2000 points."
+        "In addition it has 2000 points.",
     )
 
 
@@ -138,16 +150,18 @@ def parse_args(args: list[str]) -> Args:
     parser.add_argument(
         "shapes",
         nargs="+",
-        type=Shape,
-        choices=[*list(Shape), "all"],
+        type=str,
+        choices=[*(s.value for s in list(Shape)), "all"],
         help="The shapes to generate.",
     )
     parser.add_argument(
         "--seed", type=int, default=42, help="The random seed to use."
     )
-    a = parse_args(args)
+    a = parser.parse_args(args)
     if "all" in a.shapes:
         a.shapes = list(Shape)
+    else:
+        a.shapes = [Shape[s] for s in a.shapes]
 
     return Args(shapes=a.shapes, seed=a.seed)
 
