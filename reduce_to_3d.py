@@ -29,26 +29,58 @@ Example JSON output (but for 4D vectors, not 768-D vectors):
 import json
 import logging
 import sys
+from dataclasses import dataclass
 
 import numpy as np
 from sklearn.manifold import MDS
 
 
-def reduce_to_3d(points: np.ndarray) -> np.ndarray:
-    """Reduce the dimensionality of the points to 3D using MDS."""
-    mds = MDS(n_components=3, random_state=42, n_jobs=3)
+@dataclass
+class Args:
+    """Command-line arguments"""
+
+    num_threads: int
+
+
+def parse_args(args: list[str]) -> Args:
+    """Parse command-line arguments."""
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--num-threads",
+        "-t",
+        type=int,
+        default=3,
+        help="The number of threads to use for MDS.",
+    )
+    a = parser.parse_args(args)
+    return Args(num_threads=a.num_threads)
+
+
+def reduce_to_3d(points: np.ndarray, num_threads: int | None) -> np.ndarray:
+    """Reduce the dimensionality of the points to 3D using MDS.
+
+    Args:
+        points: An array of shape (n_points, n_dimensions) containing the
+            original points.
+        num_threads: The number of threads to use for MDS. If None, use the
+            default number of threads.
+    """
+    mds = MDS(n_components=3, random_state=42, n_jobs=num_threads)
     return mds.fit_transform(points)
 
 
 def main():
     """Read JSON input, reduce dimensionality, and output JSON."""
+    args = parse_args(sys.argv[1:])
     logging.basicConfig(level=logging.INFO)
     input_data = json.load(sys.stdin)
     points = np.array([elt["point"] for elt in input_data["points"]])
     categories = [elt["category"] for elt in input_data["points"]]
     input_data = None  # Free up memory
     logging.info("Read %d points", len(categories))
-    points_3d = reduce_to_3d(points)
+    points_3d = reduce_to_3d(points, args.num_threads)
 
     output_data = {
         "points": [
