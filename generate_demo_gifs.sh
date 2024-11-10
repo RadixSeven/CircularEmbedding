@@ -23,9 +23,13 @@ for first_shape in torus cubes blobs little_sin big_sin; do
         nice python gif_visualize.py < ${both}_3d.json > $both.gif
   done
 done
-echo "Processing all_shapes"
-nice python generate_test_vector_json.py all \
-    > all_shapes.json && \
-nice python reduce_to_3d.py -t "-1" \
-    < all_shapes.json > all_shapes_3d.json && \
-nice python gif_visualize.py < all_shapes_3d.json > all_shapes.gif;
+if [ -e all_shapes.gif ]; then
+  echo "Skipping all_shapes because it already exists."
+else
+  echo "Processing all_shapes"
+  nice python generate_test_vector_json.py all \
+      > all_shapes.json && \
+  nice python reduce_to_3d.py -t "1" \
+      < all_shapes.json > all_shapes_3d.json && \
+  nice python gif_visualize.py < all_shapes_3d.json > all_shapes.gif;
+fi
