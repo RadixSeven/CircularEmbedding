@@ -160,3 +160,38 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+# Demo generation output filed
+torus*.json
+cubes*.json
+blobs*.json
+little_sin*.json
+big_sin*.json
+torus_torus.gif
+torus_cubes.gif
+torus_blobs.gif
+torus_little_sin.gif
+torus_big_sin.gif
+cubes_torus.gif
+cubes_cubes.gif
+cubes_blobs.gif
+cubes_little_sin.gif
+cubes_big_sin.gif
+blobs_torus.gif
+blobs_cubes.gif
+blobs_blobs.gif
+blobs_little_sin.gif
+blobs_big_sin.gif
+little_sin_torus.gif
+little_sin_cubes.gif
+little_sin_blobs.gif
+little_sin_little_sin.gif
+little_sin_big_sin.gif
+big_sin_torus.gif
+big_sin_cubes.gif
+big_sin_blobs.gif
+big_sin_little_sin.gif
+big_sin_big_sin.gif
+all_shapes.json
+all_shapes_3d.json
+all_shapes.gif
