@@ -17,15 +17,15 @@ for first_shape in torus cubes blobs little_sin big_sin; do
       continue
     fi
     echo "Processing $both"
-    python generate_test_vector_json.py $f $s \
+    nice python generate_test_vector_json.py $f $s \
         > $both.json && \
         nice python reduce_to_3d.py -t "-1" < $both.json > ${both}_3d.json && \
-        python gif_visualize.py < ${both}_3d.json > $both.gif
+        nice python gif_visualize.py < ${both}_3d.json > $both.gif
   done
 done
 echo "Processing all_shapes"
-python generate_test_vector_json.py all \
+nice python generate_test_vector_json.py all \
     > all_shapes.json && \
 nice python reduce_to_3d.py -t "-1" \
     < all_shapes.json > all_shapes_3d.json && \
-python gif_visualize.py < all_shapes_3d.json > all_shapes.gif;
+nice python gif_visualize.py < all_shapes_3d.json > all_shapes.gif;
