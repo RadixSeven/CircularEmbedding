@@ -214,8 +214,9 @@ def little_sin_points() -> list[np.ndarray]:
     for _ in range(1000):
         x = np.random.uniform(-25, 25)
         y = 25 * np.sin(np.pi * x / 25)
-        other_dims = np.random.uniform(-25, 25, 766)
-        point = np.array([x, y, *other_dims.tolist()])
+        before_dims = np.random.uniform(-25, 25, 9)
+        other_dims = np.random.uniform(-25, 25, 768 - 2 - 9)
+        point = np.array([*before_dims.tolist(), x, y, *other_dims.tolist()])
         points.append(point)
     return points
 
@@ -223,13 +224,12 @@ def little_sin_points() -> list[np.ndarray]:
 def big_sin_points() -> list[np.ndarray]:
     """Return points for big_sin"""
     points = []
-    for _ in range(1000):
-        x = np.random.uniform(-50, 50)
-        y = 50 * np.sin(np.pi * x / 50)
-        other_dims = np.random.uniform(-50, 50, 766)
-        point = np.array(
-            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, x, y, *other_dims.tolist()]
-        )
+    for _ in range(2000):
+        x = np.random.uniform(-100, 100)
+        y = 100 * np.sin(np.pi * x / 100)
+        before_dims = np.random.uniform(-25, 25, 11)
+        other_dims = np.random.uniform(-25, 25, 768 - 2 - 11)
+        point = np.array([*before_dims.tolist(), x, y, *other_dims.tolist()])
         points.append(point)
     return points
 
