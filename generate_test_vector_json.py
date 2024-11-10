@@ -84,15 +84,18 @@ class Shape(Enum):
         "has height 50 and width 50 and is centered at the origin. "
         "The S-curve is defined by the equation "
         "y = 25 * sin(pi x/(25)). where -25 <= x <= 25 and the values "
-        "at all other dimensions are uniformly sampled between -25 and 25."
+        "at all other dimensions are uniformly sampled between -1 and 1."
         "So, one point might be "
-        "(-1,-2,3,5.5,2.1,-2,-10,-15,-12,20, 25*sin(pi*20/25), 10, -22,...), ",
+        "(-0.9,-.2,.3,.55,.21,-.2,-.10,-.15,-.12,20, 25*sin(pi*20/25),"
+        " .10, -.22,...), "
+        "If we make the confusing directions wider, MDS does not pick"
+        "up the S-curve structure as well.",
     )
     big_sin = (
         "big_sin",
         "Like little_sin, but the S-curve has height 100 and width 100. Its "
         "x and y coordinates are 12th and 13th in the 768-dimensional space."
-        "In addition it has 2000 points.",
+        "In addition it has 2000 points and its confusion dims are -5 to 5.",
     )
 
 
@@ -214,8 +217,8 @@ def little_sin_points() -> list[np.ndarray]:
     for _ in range(1000):
         x = np.random.uniform(-25, 25)
         y = 25 * np.sin(np.pi * x / 25)
-        before_dims = np.random.uniform(-25, 25, 9)
-        other_dims = np.random.uniform(-25, 25, 768 - 2 - 9)
+        before_dims = np.random.uniform(-1, 1, 9)
+        other_dims = np.random.uniform(-1, 1, 768 - 2 - 9)
         point = np.array([*before_dims.tolist(), x, y, *other_dims.tolist()])
         points.append(point)
     return points
@@ -227,8 +230,8 @@ def big_sin_points() -> list[np.ndarray]:
     for _ in range(2000):
         x = np.random.uniform(-100, 100)
         y = 100 * np.sin(np.pi * x / 100)
-        before_dims = np.random.uniform(-25, 25, 11)
-        other_dims = np.random.uniform(-25, 25, 768 - 2 - 11)
+        before_dims = np.random.uniform(-5, 5, 11)
+        other_dims = np.random.uniform(-5, 5, 768 - 2 - 11)
         point = np.array([*before_dims.tolist(), x, y, *other_dims.tolist()])
         points.append(point)
     return points
