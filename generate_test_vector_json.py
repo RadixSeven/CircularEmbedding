@@ -265,7 +265,7 @@ def main():
             for point in points
         ]
     }
-    print(json.dumps(output, indent=4))  # noqa: T201
+    print(json.dumps(output, indent=1))  # noqa: T201
 
 
 if __name__ == "__main__":

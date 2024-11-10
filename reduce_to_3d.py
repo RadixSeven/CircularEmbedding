@@ -61,7 +61,7 @@ def main():
         ]
     }
 
-    print(json.dumps(output_data, indent=2))  # noqa: T201
+    print(json.dumps(output_data, indent=1))  # noqa: T201
 
 
 if __name__ == "__main__":
