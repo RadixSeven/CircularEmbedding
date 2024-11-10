@@ -28,3 +28,7 @@ python generate_test_vector_json.py torus > torus.json
 python reduce_to_3d.py < torus.json > torus_3d.json
 python gif_visualze.py < torus_3d.json > torus.gif
 ```
+
+If you run out of memory, the --num-threads option can
+reduce memory for reduce_to_3d.py slightly when there is a
+lower number of threads.
