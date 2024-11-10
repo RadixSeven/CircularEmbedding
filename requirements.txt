@@ -4,3 +4,6 @@ pre-commit
 numpy
 black
 scikit-learn
+matplotlib
+pillow
+
