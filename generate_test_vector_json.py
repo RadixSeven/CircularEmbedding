@@ -205,7 +205,9 @@ def cubes_points() -> list[np.ndarray]:
 def blobs_points() -> list[np.ndarray]:
     """Return points for blobs"""
     points = []
-    for vertex in scaled_dodecahedron_vertices:
+    for vertex_3d in scaled_dodecahedron_vertices:
+        vertex = np.zeros((1000, 768))
+        vertex[:, 6:9] = vertex_3d
         cluster = np.random.normal(loc=vertex, scale=2.5, size=(1000, 768))
         points.extend(cluster)
     return points
