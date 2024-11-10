@@ -11,6 +11,12 @@ for first_shape in torus cubes blobs little_sin big_sin; do
       f=$first_shape
       s=$second_shape
     fi
+    # Use one thread if blobs is one of the shapes, -1 otherwise.
+    if [ "$f" = "blobs" ] || [ "$s" = "blobs" ]; then
+      threads=1
+    else
+      threads=-1
+    fi
     both="${f}_${s}"
     if [ -e $both.gif ]; then
       echo "Skipping $both because it already exists."
@@ -19,8 +25,9 @@ for first_shape in torus cubes blobs little_sin big_sin; do
     echo "Processing $both"
     nice python generate_test_vector_json.py $f $s \
         > $both.json && \
-        nice python reduce_to_3d.py -t "-1" < $both.json > ${both}_3d.json && \
-        nice python gif_visualize.py < ${both}_3d.json > $both.gif
+    nice python reduce_to_3d.py -t "$threads" \
+        < $both.json > ${both}_3d.json && \
+    nice python gif_visualize.py < ${both}_3d.json > $both.gif
   done
 done
 if [ -e all_shapes.gif ]; then
