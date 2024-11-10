@@ -3,3 +3,4 @@ mypy
 pre-commit
 numpy
 black
+scikit-learn
