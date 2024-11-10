@@ -1,4 +1,9 @@
-"""Take the output of generate_test_vector_json.py and reduce it to 3D using MDS.
+"""Take the output of generate_test_vector_json.py and reduce it to 3D.
+
+Currently, uses Isomap to reduce the dimensionality of the points to 3D. This
+does not preserve global structure when the points form good clusters so their
+nearest neighbors are all in the same cluster. However, it is much faster and
+more memory-efficient than code that requires the full distance matrix.
 
 Usage:
     python reduce_to_3d.py < torus.json > torus_3d.json
@@ -32,7 +37,7 @@ import sys
 from dataclasses import dataclass
 
 import numpy as np
-from sklearn.manifold import MDS
+from sklearn.manifold import Isomap
 
 
 @dataclass
@@ -52,14 +57,14 @@ def parse_args(args: list[str]) -> Args:
         "-t",
         type=int,
         default=3,
-        help="The number of threads to use for MDS.",
+        help="The number of threads to use for reduction.",
     )
     a = parser.parse_args(args)
     return Args(num_threads=a.num_threads)
 
 
 def reduce_to_3d(points: np.ndarray, num_threads: int | None) -> np.ndarray:
-    """Reduce the dimensionality of the points to 3D using MDS.
+    """Reduce the dimensionality of the points to 3D using Isomap.
 
     Args:
         points: An array of shape (n_points, n_dimensions) containing the
@@ -67,7 +72,7 @@ def reduce_to_3d(points: np.ndarray, num_threads: int | None) -> np.ndarray:
         num_threads: The number of threads to use for MDS. If None, use the
             default number of threads.
     """
-    mds = MDS(n_components=3, random_state=42, n_jobs=num_threads)
+    mds = Isomap(n_components=3, metric="euclidean", n_jobs=num_threads)
     return mds.fit_transform(points)
 
 
@@ -78,6 +83,7 @@ def main():
     input_data = json.load(sys.stdin)
     points = np.array([elt["point"] for elt in input_data["points"]])
     categories = [elt["category"] for elt in input_data["points"]]
+    # noinspection PyUnusedLocal
     input_data = None  # Free up memory
     logging.info("Read %d points", len(categories))
     points_3d = reduce_to_3d(points, args.num_threads)

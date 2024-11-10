@@ -20,8 +20,7 @@ To see the list of available visualization options:
 python generate_test_vector_json.py --help
 ```
 
-To visualize one of the test vector sets (requires a lot of
-memory for large sets):
+To visualize one of the test vector sets:
 
 ```bash
 python generate_test_vector_json.py torus > torus.json
